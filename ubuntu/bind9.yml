@@ -1,0 +1,15 @@
+---
+- hosts: dns
+  become: true
+
+  tasks:
+     - name: Install bind9 and requirements
+       apt:
+         name: 
+           - bind9
+           - bind9utils
+           - bind9-doc
+           - dnsutils
+         state: present
+         update_cache: true
+       

@@ -1,0 +1,102 @@
+# tasks file for rhel/roles/zk-kafka
+---
+- name: Ensure requirements are installed
+  become: true
+  yum:
+    name: 
+      - wget
+      - nano
+      - java-1.8.0-openjdk
+      - epel-release
+    state: present
+    update_cache: true
+
+- name: Ping all hosts
+  ping:
+
+# create zk user
+- name: Create zk group
+  become: true
+  ansible.builtin.group:
+    name: zk
+    state: present
+    gid: 2000
+
+- name: Add zk user
+  become: true 
+  ansible.builtin.user:
+    name: zk
+    shell: /bin/bash
+    uid: 2000
+    groups: zk
+    append: yes
+
+# mkdir /opt/zk
+- name: Create /opt/zk directory
+  become: true
+  ansible.builtin.file:
+    path: /opt/zk
+    state: directory
+    owner: zk
+    group: zk
+    mode: '0755' 
+
+# grab zk from apache site
+- name: Download zookeeper from Apache
+  become: yes
+  get_url:
+    url: https://ftp.wayne.edu/apache/zookeeper/zookeeper-3.6.3/apache-zookeeper-3.6.3-bin.tar.gz
+    #checksum: sha512:64e2701c019ed46f45f4d53b2c5eaeaf7cf48c342bbafa032a0819d527fc77caebfada6bdad34e5171e6d838f40b16c95b62ce378b53dfc827af2d60cec0b17c
+    dest: /opt/zk
+    mode: 0755
+    group: zk
+    owner: zk
+#extract zk to /opt/zk/
+- name: Extract ZK
+  become: true
+  command: "tar zxf /opt/zk/apache-zookeeper-3.6.3-bin.tar.gz -C /opt/zk/"
+
+- name: rename directory
+  become: true
+  command: mv /opt/zk/apache-zookeeper-3.6.3-bin /opt/zk/zk-3.6.3
+
+- name: Fix /opt/zk perms
+  become: true
+  ansible.builtin.file:
+    path: /opt/zk/zk-3.6.3
+    state: directory
+    recurse: yes
+    owner: zk
+    group: zk
+    mode: '0755'
+
+# tweak conf file
+- name: Zookeeper properties file
+  become: yes
+  ansible.builtin.template:
+    src: templates/zookeeper.j2
+    dest: /opt/zk/zk-3.6.3/conf/zoo.cfg
+    owner: zk
+    group: zk
+    mode: '0644'
+
+# build unit file
+- name: Zookeeper unit file
+  become: yes
+  ansible.builtin.template:
+    src: templates/zk.j2
+    dest: /etc/systemd/system/zookeeper.service
+    owner: root
+    group: root
+    mode: '0744'
+
+# reload systemd
+- name: Reload Systemd
+  become: yes
+  command: systemctl daemon-reload
+
+# start zk
+- name: Start Zookeeper
+  ansible.builtin.service: 
+    name: zookeeper
+    state: started

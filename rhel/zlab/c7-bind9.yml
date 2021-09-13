@@ -1,0 +1,16 @@
+---
+- hosts: bind
+  become: true
+
+  tasks:
+     - name: Install bind9 and requirements
+       yum:
+         name: 
+           - bind
+           - bind-utils
+         state: present
+         update_cache: true
+     - name: Disable SELinux
+       ansible.posix.selinux:
+         state: disabled
+         

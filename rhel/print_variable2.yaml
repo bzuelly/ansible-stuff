@@ -1,0 +1,12 @@
+- hosts: all
+  user: root
+  tasks:
+    - name: Print hostname of all hosts
+      debug:
+        msg: '{{ ansible_hostname }} - {{ ansible_default_ipv4.address }}'
+    - name: ensure wget is installed
+      yum:
+        name: wget
+        state: present
+        update_cache: true
+      become: true

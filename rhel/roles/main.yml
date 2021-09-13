@@ -1,0 +1,5 @@
+---
+- hosts: zk
+  roles:
+    - gather_info
+    - zk-kafka

@@ -1,0 +1,12 @@
+- hosts: all
+  user: root
+  tasks:
+    - name: ensure wget is installed
+      yum:
+        name: 
+          - wget
+          - nano
+          - epel-release
+        state: present
+        update_cache: true
+        

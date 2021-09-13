@@ -1,0 +1,41 @@
+- hosts: xylab
+  user: bryan
+  become: true
+  tasks:
+    - name: Ping all hosts
+      ping:
+
+    - name: Add Terabithia xymon repo
+      yum_repository:
+        name: xymon
+        description: Xymon Terabithia RPMS - EL $releasever - $basearch
+        file: terabithia-xymon.yum_repository
+        baseurl: https://repo.terabithia.org/rpms/xymon/el$releasever/$basearch/
+        gpgcheck: yes
+        gpgkey: https://repo.terabithia.org/rpms/RPM-GPG-KEY-JCLEAVER
+
+
+    - name: Ensure packages are installed
+      yum:
+        name: 
+          - wget
+          - nano
+          - epel-release
+          - xymon-client
+          - moreutils
+        state: present
+        update_cache: true
+
+    - name: Change xymon server block in xymonclient.cfg
+      command: sed -i 's/0.0.0.0/xymon.zuelly.lcl/g' /usr/share/xymon-client/etc/xymonclient.cfg
+
+    - name: start xymon-client
+      ansible.builtin.service: 
+        name: xymon-client
+        state: started
+
+    - name: disable selinux
+      selinux:
+        state: disabled
+
+    

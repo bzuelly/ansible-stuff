@@ -1,0 +1,7 @@
+---
+- hosts: c7repo
+  user: root
+  roles: 
+     - buildrepo
+
+    

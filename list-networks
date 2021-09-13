@@ -1,0 +1,9 @@
+#list networks
+virsh net-list
+
+#describe network
+virsh net-info default
+
+#list leases for default network
+virsh net-dhcp-leases default
+

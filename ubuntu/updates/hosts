@@ -1,0 +1,13 @@
+## set up ssh user name and path to python3 ##
+[dns:vars]
+ansible_user='bryan'
+ansible_become=yes
+ansible_become_method=sudo
+ansible_python_interpreter='/usr/bin/env python3'
+ 
+#########################
+[dns]
+ns1.zuelly.lcl
+ns2.zuelly.lcl
+ns3.zuelly.lcl
+ns4.zuelly.lcl

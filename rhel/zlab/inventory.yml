@@ -1,0 +1,12 @@
+---
+  bind:
+    hosts:
+      dns6.zuelly.lcl:
+      dns7.zuelly.lcl:
+      dns8.zuelly.lcl:
+      dns9.zuelly.lcl:
+
+  pihole:
+    hosts:
+      pihole1.zuelly.lcl:
+      pihole2.zuelly.lcl:

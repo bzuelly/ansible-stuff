@@ -1,0 +1,15 @@
+- hosts: zk
+  user: bryan
+  tasks:
+    - name: Print Node Specs
+      debug:
+         msg:
+           - "Hello World!"
+           - "Hostname: {{ ansible_nodename }}"  
+           - "IP: {{ ansible_default_ipv4.address }}"
+           - "DNS: {{ ansible_dns.nameservers}}"
+           - "OS-RELEASE: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+    
+    
+           
+        

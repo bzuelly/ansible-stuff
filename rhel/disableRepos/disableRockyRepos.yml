@@ -1,0 +1,46 @@
+---
+- name: Disable Rocky Repos
+  hosts: xymon
+  become: true
+  tasks:
+    - name: disable repos
+      shell: sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/Rocky*.repo
+ 
+    - name: Add local AppStream
+      yum_repository:
+        name: localappstream
+        description: Local AppStream Repo
+        file: local_repos
+        baseurl: http://10.254.239.137:8000/AppStream/x86_64/os
+        gpgcheck: no
+
+    - name: Add local BaseOS
+      yum_repository:
+        name: localbaseos
+        description: Local BaseOS Repo
+        file: local_repos
+        baseurl: http://10.254.239.137:8000/BaseOS/x86_64/os
+        gpgcheck: no
+
+    - name: Add local PowerTools
+      yum_repository:
+        name: localpowertools
+        description: Local PowerTools Repo
+        file: local_repos
+        baseurl: http://10.254.239.137:8000/PowerTools/x86_64/os
+        gpgcheck: no
+
+    - name: Upgrade All Packages
+      become: yes
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Passwordless sudo for wheel group
+      become: yes
+      ansible.builtin.template:
+        src: templates/nopasswheel.j2
+        dest: /etc/sudoers.d/nopasswheel
+        owner: root
+        group: root
+        mode: '0400'

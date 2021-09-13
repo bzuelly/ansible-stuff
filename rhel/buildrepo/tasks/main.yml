@@ -1,0 +1,28 @@
+---
+# tasks file for buildrepo
+
+- name: confirm apache createrepo rsync installed
+  yum: name={{item}} state=installed
+  with_items:
+     - httpd
+     - createrepo
+     - rsync
+
+- name: create dirs for centos6 and EPEL repo
+  file: path={{item}} owner=apache group=apache state=directory
+  with_items:
+    - /data/repo/centos/7/
+
+- name: httpd.conf
+  lineinfile:
+      dest="/etc/httpd/conf/httpd.conf" regexp="^Alias /centos /data/repo/centos"
+      insertafter="^DocumentRoot " line="Alias /centos /data/repo/centos"
+- name: restart wob server
+  service: name=httpd state=restarted enabled=yes
+
+- name: disable selinux
+  selinux:
+    state: disabled
+
+#- name: populate CentOS repository
+#      command: '/usr/bin/rsync  -av --delete --delete-excluded --exclude "atomic" --exclude "cloud" --exclude "configmanagement" --exclude "cr" --exclude "dotnet" --exclude "fasttrack" --exclude "infra" --exclude "isos" --exclude "messaging" --exclude "nfv" --exclude "opstools" --exclude "os" --exclude "paas" --exclude "rt" --exclude "sclo" --exclude "storage" --exclude "virt"  rsync://bay.uchicago.edu/centos/7/ /data/repo/centos/7/'

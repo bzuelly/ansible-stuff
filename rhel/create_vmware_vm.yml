@@ -1,0 +1,23 @@
+---
+   - name: Create a virtual machine on given ESXi hostname
+     community.vmware.vmware_guest:
+    #hostname: "{{ vcenter_hostname }}"
+     username: root
+     password: redhat78$
+    
+   - name: test_vm_0001
+     state: poweredon
+     guest_id: centos64Guest
+    # This is hostname of particular ESXi server on which user wants VM to be deployed
+     esxi_hostname: https://10.254.239.138/
+     disk:
+        - size_gb: 10
+          type: thin
+          datastore: datastore1
+          hardware:
+          memory_mb: 512
+          num_cpus: 4
+          scsi: paravirtual
+  
+  #delegate_to: localhost
+  #register: deploy_vm

@@ -1,0 +1,7 @@
+- name: KVM hosts 
+  hosts: c7-host.zuelly.lcl 
+  become: true 
+  roles: 
+    - ansible-qemu-kvm
+
+

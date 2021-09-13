@@ -1,0 +1,38 @@
+---
+- hosts: r8dns
+  become: true
+
+  tasks: 
+     - name: Install deadsnakes repo
+       apt_repository:
+         repo: ppa:deadsnakes/ppa       
+     - name: Python 3.6
+       apt:
+         name: 
+           - python3.6
+           - clustershell
+         state: present
+         update_cache: true
+     - name: Install Clustershell
+       apt:
+         name:
+           - clustershell
+           - python3-clustershell
+         state: present
+     - name: Setup clush groups
+       template:
+         src: templates/groups
+         dest: /etc/clustershell/groups
+         owner: root
+         group: root
+         mode: '0644'
+     - name: Install bind9 and requirements
+       apt:
+         name: 
+           - bind9
+           - bind9utils
+           - bind9-doc
+           - dnsutils
+         state: present
+         update_cache: true
+       

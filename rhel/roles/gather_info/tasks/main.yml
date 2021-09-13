@@ -1,0 +1,10 @@
+---
+- name: Collect distribution
+  ansible.builtin.setup:
+    filter:
+      - 'ansible_distribution'
+
+
+- name: Classify hosts depending on their OS distribution
+  group_by:
+    key: os_{{ ansible_facts['distribution'] }}

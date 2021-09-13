@@ -1,0 +1,16 @@
+---
+- hosts: dns
+  become: true
+
+  tasks:
+     - name: Install deadsnakes repo
+       apt_repository:
+         repo: ppa:deadsnakes/ppa
+       
+     - name: Python 3.6
+       apt:
+         name: 
+           - python3.6
+         state: present
+         update_cache: true
+       

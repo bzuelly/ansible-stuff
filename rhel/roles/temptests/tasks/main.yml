@@ -1,0 +1,10 @@
+---
+# tasks file for rhel/roles/temptests
+
+- name: add application configs
+  template:
+    src: config.ini.j2
+    dest: /opt/config.ini
+    owner: bryan
+    group: bryan
+    mode: 0644

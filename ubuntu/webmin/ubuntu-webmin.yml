@@ -1,0 +1,28 @@
+---
+- hosts: dns
+  become: true
+  tasks:
+     - name: Add Webmin key
+       apt_key: 
+        url='http://www.webmin.com/jcameron-key.asc'
+        state=present
+
+     - name: Add Webmin repositories
+       apt_repository: 
+        repo='{{ item }}'
+        state=present
+       with_items:
+         - 'deb http://download.webmin.com/download/repository sarge contrib'
+         
+   
+     - name: Install Webmin & requirements
+       apt:
+         name: 
+           - webmin
+           - libauthen-pam-perl
+           - libio-pty-perl
+           - libnet-ssleay-perl
+           - unzip
+         state: present
+         update_cache: true
+       

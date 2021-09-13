@@ -1,0 +1,16 @@
+[Unit]
+Description=Zookeeper Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=zk
+Group=zk
+ExecStart=/opt/zk/zk-3.6.3/bin/zkServer.sh start /opt/zk/zk-3.6.3/conf/zoo.cfg
+ExecStop=/opt/zk/zk-3.6.3/bin/zkServer.sh stop
+SyslogIdentifier=zk
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
