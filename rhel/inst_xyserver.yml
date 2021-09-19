@@ -1,9 +1,13 @@
-- hosts: xylab
+- hosts: xytest
   user: bryan
   become: true
   tasks:
     - name: Ping all hosts
       ping:
+
+    - name: disable selinux
+      selinux:
+        state: disabled
 
     - name: Add Terabithia xymon repo
       yum_repository:
@@ -16,26 +20,13 @@
 
 
     - name: Ensure packages are installed
-      yum:
+      dnf:  
         name: 
-          - wget
-          - nano
           - epel-release
-          - xymon-client
+          - wget
+          - nano 
+          - xymon
           #- moreutils
         state: present
         update_cache: true
-
-    - name: Change xymon server block in xymonclient.cfg
-      command: sed -i 's/0.0.0.0/xymon.zuelly.lcl/g' /usr/share/xymon-client/etc/xymonclient.cfg
-
-    - name: start xymon-client
-      ansible.builtin.service: 
-        name: xymon-client
-        state: started
-
-    - name: disable selinux
-      selinux:
-        state: disabled
-
     

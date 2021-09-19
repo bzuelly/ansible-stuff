@@ -22,3 +22,9 @@ r8pihole
 
 [node3]
 node3.zuelly.lcl
+
+[xylab]
+10.254.239.128
+
+[xytest]
+10.254.239.110
