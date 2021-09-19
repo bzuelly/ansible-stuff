@@ -1,3 +1,5 @@
+---
+# tasks file for roles/check-hostname
 - hosts: zk
   user: bryan
   tasks:
@@ -10,6 +12,3 @@
            - "DNS: {{ ansible_dns.nameservers}}"
            - "OS-RELEASE: {{ ansible_distribution }} {{ ansible_distribution_version }}"
     
-    
-           
-        

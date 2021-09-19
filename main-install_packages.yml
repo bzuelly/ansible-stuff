@@ -1,0 +1,5 @@
+- name: Install packages
+  hosts: testbx
+  become: true 
+  roles: 
+    - install-package

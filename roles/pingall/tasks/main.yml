@@ -1,7 +1,7 @@
+---
+# tasks file for roles/pingall
 - hosts: all
   user: bryan
   tasks:
     - name: Ping all hosts
       ping:
-
-

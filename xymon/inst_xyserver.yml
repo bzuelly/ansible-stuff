@@ -20,13 +20,18 @@
 
 
     - name: Ensure packages are installed
-      dnf:  
-        name: 
-          - epel-release
-          - wget
-          - nano 
-          - xymon
-          #- moreutils
+      dnf:
+        name: '{{ item }}'
         state: present
-        update_cache: true
+        update_cache: True
+      with_items:
+        - epel-release
+        - wget 
+        - nano
+        - moreutils
+        - xymon
+      
+      
+      
+      
     
