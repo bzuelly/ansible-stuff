@@ -22,10 +22,11 @@
     - name: Ensure packages are installed
       dnf:
         name: '{{ item }}'
-        state: present
+        state: latest
         update_cache: True
       with_items:
-        - epel-release
+        - "epel-release"
+        - perl-IPC-Run
         - wget 
         - nano
         - moreutils
