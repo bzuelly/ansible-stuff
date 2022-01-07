@@ -1,4 +1,4 @@
-- hosts: xytest
+- hosts: xymon
   user: bryan
   become: true
   tasks:

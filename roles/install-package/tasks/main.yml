@@ -1,10 +1,14 @@
 ---
-
-- name: ensure wget is installed
+- name: Package Installation
   yum:
     name: 
       - wget
       - nano
       - epel-release
+      - java-1.8.0-openjdk
+      - java-1.8.0-openjdk-devel
+      - java-11-openjdk 
+      - java-11-openjdk-devel
+      - git
     state: present
     update_cache: true

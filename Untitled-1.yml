@@ -1,0 +1,36 @@
+---
+# tasks file for roles/printvars
+- hosts: plex
+  user: root
+  tasks:
+    - name: Print Hostname/IP of all hosts
+      debug:
+        msg: '{{ ansible_hostname }} - {{ ansible_default_ipv4.address }}'
+    
+    - name: Add Plex Repo
+      yum_repository:
+        name: Plex
+        description: Plex repo
+        baseurl: https://downloads.plex.tv/repo/rpm/$basearch/
+        gpgcheck: yes
+        gpgkey: https://downloads.plex.tv/plex-keys/PlexSign.key
+
+    - name: Install Plexmediaserver
+      dnf:
+        name: plexmediaserver
+        state: installed
+      notify: 
+       - Enable Plexmediaserver
+       - Start Plexmediaserver
+       
+    - name: Enable Plexmediaserver
+      ansible.builtin.systemd:
+        name: plexmediaserver.service
+        enabled: yes
+
+    - name: Start Plexmediaserver
+      ansible.builtin.systemd: 
+        name: plexmediaserver.service
+        state: started
+
+  

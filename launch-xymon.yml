@@ -1,0 +1,5 @@
+- name: Install Xymon
+  hosts: xymon
+  become: true 
+  roles: 
+    - xymon

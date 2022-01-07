@@ -1,0 +1,27 @@
+---
+# tasks file for roles/log4j
+# mkdir /opt/logpresso
+- name: Create /opt/logpresso directory
+  become: true
+  ansible.builtin.file:
+    path: /opt/logpresso
+    state: directory
+    #owner: zk
+    #group: zk
+    mode: '0755' 
+
+- name: Download logpresso
+  #become: yes
+  get_url:
+    url: https://github.com/logpresso/CVE-2021-44228-Scanner/releases/download/v2.7.1/logpresso-log4j2-scan-2.7.1-linux.tar.gz
+    mode: 0755
+    #group: zk
+    #owner: zk
+
+- name: Extract logpresso
+  become: true
+  command: "tar zxf /opt/logpresso/logpresso-log4j2-scan-2.7.1-linux.tar.gz -C /opt/logpresso/"
+
+#- name: Execute Scan
+#  become: true
+#  command: 

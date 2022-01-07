@@ -1,0 +1,4 @@
+- name: DNF Update 
+  hosts: jagent
+  roles: 
+    - updates

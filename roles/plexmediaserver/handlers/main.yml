@@ -1,0 +1,11 @@
+---
+# handlers file for roles/plexmediaserver
+- name: Enable Plexmediaserver
+  ansible.builtin.systemd:
+    name: plexmediaserver.service
+    enabled: yes
+
+- name: Start Plexmediaserver
+  ansible.builtin.systemd: 
+    name: plexmediaserver.service
+    state: started

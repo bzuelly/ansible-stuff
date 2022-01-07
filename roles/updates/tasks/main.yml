@@ -1,9 +1,13 @@
 ---
 # tasks file for roles/updates
-- hosts: zk
-  user: root
-  tasks:
-    - name: update the system
-      dnf:
-        name: "*"
-        state: latest
+- name: update the system
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Add the user 'jenkins' with a specific uid
+  ansible.builtin.user:
+    name: jenkins
+    comment: Build User
+    uid: 1040
+    group: wheel

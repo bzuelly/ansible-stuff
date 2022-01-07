@@ -1,4 +1,4 @@
-- hosts: xylab
+- hosts: xymon
   user: bryan
   become: true
   tasks:
