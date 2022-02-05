@@ -1,0 +1,64 @@
+- hosts: xymonClients
+  user: bryan
+  become: true
+  tasks:
+    - name: Ping all hosts
+      ping:
+
+    - name: Ensure packages are installed
+      yum:
+        name: 
+          - nginx
+          - haproxy
+          - redis
+          - mosquitto
+
+    - name: start/enable nginx
+      ansible.builtin.service: 
+        name: nginx
+        state: started
+        masked: no
+
+    - name: enable nginx
+      ansible.builtin.service: 
+        name: nginx
+        enabled: yes
+
+    - name: start/enable haproxy
+      ansible.builtin.service: 
+        name: haproxy
+        state: started
+
+    - name: start/enable haproxy
+      ansible.builtin.service: 
+        name: haproxy
+        enabled: yes
+        masked: no
+
+    - name: start/enable redis
+      ansible.builtin.service: 
+        name: redis
+        state: started
+
+    - name: start/enable redis
+      ansible.builtin.service: 
+        name: redis
+        enabled: yes
+        masked: no
+
+    - name: start/enable mosquitto
+      ansible.builtin.service: 
+        name: mosquitto
+        state: started
+        enabled: yes   
+
+    - name: start/enable mosquitto
+      ansible.builtin.service: 
+        name: mosquitto
+        enabled: yes
+        masked: no        
+
+
+    - name: disable selinux
+      selinux:
+        state: disabled

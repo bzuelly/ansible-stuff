@@ -1,0 +1,21 @@
+
+###For Webserver build
+
+cd lab-builder/xweb
+
+ansible-playbook call_websvr.yml -i ../hosts -K
+
+###patcher.yml
+updates machines
+
+###installXymonSvr.yml
+installs terrabithia repo and xymon server
+
+###installXymonClient.yml
+installs terrabithia repo and xymon Client
+
+###deployPlugin.yml
+
+deploys xymon plugin
+
+

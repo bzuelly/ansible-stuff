@@ -1,0 +1,5 @@
+- name: Install ZK
+  hosts: zktest
+  become: true 
+  roles: 
+    - zk

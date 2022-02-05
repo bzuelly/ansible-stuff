@@ -1,0 +1,14 @@
+#fancyIndex Build Package requirements(Rocky Linux 8 )for nginx 1.14.1
+
+sudo dnf groupinstall "Development Tools"
+  899  sudo dnf install pcre-devel
+  901  sudo dnf install libssl-devel
+  902  sudo dnf install libssl-dev
+  903  sudo dnf install libssl*
+  904  sudo dnf install openssl openssl-devel
+  906  sudo dnf info libxslt
+  907  sudo dnf info libxslt-devel
+  908  sudo dnf install libxslt-devel
+  910  sudo dnf install gd gd-devel
+  912  sudo dnf install perl-ExtUtils-Embed
+

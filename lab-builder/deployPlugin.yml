@@ -1,0 +1,40 @@
+- hosts: lab
+  user: bryan
+  become: true
+  tasks:
+
+    - name: create /usr/share/xymon-client/ext/running_svcs.list
+      ansible.builtin.file:
+        path: /usr/share/xymon-client/ext/running_svcs.list
+        owner: root
+        group: root
+        mode: '0655'
+
+    - name: Copy script to remote
+      ansible.builtin.copy:
+        src: files/svcMon.sh
+        dest: /usr/share/xymon-client/ext/svcMon.sh
+        owner: root
+        group: root
+        mode: '0755'
+    
+    - name: Copy scriptStub to remote
+      ansible.builtin.copy:
+        src: files/svcs.list
+        dest: /usr/share/xymon-client/ext/svcs.list
+        owner: root
+        group: root
+        mode: '0644'
+    
+
+    - name: Insert/Update after main client task
+      blockinfile:
+        path: /usr/share/xymon-client/etc/clientlaunch.cfg
+        insertafter: "# The main client task"
+        block: |
+          [svcMon]
+              ENVFILE /etc/xymon-client/xymonclient.cfg
+              CMD  /usr/share/xymon-client/ext/svcMon.sh
+              LOGFILE $XYMONCLIENTLOGS/svcMon.log
+              INTERVAL 5m
+          

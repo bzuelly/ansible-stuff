@@ -1,0 +1,23 @@
+- hosts: xymonClients
+  user: bryan
+  become: true
+  tasks:
+    - name: Ping all hosts
+      ping:
+    - name: Ensure packages are installed
+      yum:
+        name: 
+          - wget
+          - nano 
+          - git
+          - gcc
+          - gcc-c++
+          - ansible
+          - nodejs
+          - gettext
+          - device-mapper-persistent-data
+          - lvm2
+          - bzip2
+          - python3-pip
+        state: present
+        update_cache: true

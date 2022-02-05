@@ -1,18 +1,10 @@
-# tasks file for rhel/roles/zk-kafka
 ---
-- name: Ensure requirements are installed
-  become: true
-  yum:
-    name: 
-      - wget
-      - nano
-      - java-1.8.0-openjdk
-      - epel-release
-    state: present
-    update_cache: true
+# tasks file for roles/zk
 
-- name: Ping all hosts
-  ping:
+- name: Check for zk role
+  stat:
+    path: /opt/roles/zk
+  register: zkRole
 
 # create zk user
 - name: Create zk group
@@ -23,7 +15,7 @@
     gid: 2000
 
 - name: Add zk user
-  become: true 
+  become: true
   ansible.builtin.user:
     name: zk
     shell: /bin/bash
@@ -39,26 +31,29 @@
     state: directory
     owner: zk
     group: zk
-    mode: '0755' 
+    mode: '0755'
 
 # grab zk from apache site
 - name: Download zookeeper from Apache
   become: yes
   get_url:
     url: https://ftp.wayne.edu/apache/zookeeper/zookeeper-3.6.3/apache-zookeeper-3.6.3-bin.tar.gz
-    #checksum: sha512:64e2701c019ed46f45f4d53b2c5eaeaf7cf48c342bbafa032a0819d527fc77caebfada6bdad34e5171e6d838f40b16c95b62ce378b53dfc827af2d60cec0b17c
     dest: /opt/zk
     mode: 0755
     group: zk
     owner: zk
+  when: zkRole.stat.exists == false  
+
 #extract zk to /opt/zk/
 - name: Extract ZK
   become: true
   command: "tar zxf /opt/zk/apache-zookeeper-3.6.3-bin.tar.gz -C /opt/zk/"
+  when: zkRole.stat.exists == false
 
 - name: rename directory
   become: true
   command: mv /opt/zk/apache-zookeeper-3.6.3-bin /opt/zk/zk-3.6.3
+  when: zkRole.stat.exists == false
 
 - name: Fix /opt/zk perms
   become: true
@@ -79,6 +74,7 @@
     owner: zk
     group: zk
     mode: '0644'
+  when: zkRole.stat.exists == false
 
 # build unit file
 - name: Zookeeper unit file
@@ -88,7 +84,30 @@
     dest: /etc/systemd/system/zookeeper.service
     owner: root
     group: root
-    mode: '0744'
+    mode: '0644'
+  when: zkRole.stat.exists == false
+
+# mkdir /opt/zk/zk-3.6.3
+- name: Create /opt/zk/zk-3.6.3/data
+  become: true
+  ansible.builtin.file:
+    path: /opt/zk/zk-3.6.3/data
+    state: directory
+    owner: zk
+    group: zk
+    mode: '0755'
+  when: zkRole.stat.exists == false
+
+# tweak myid file
+- name: Zookeeper myid file
+  become: yes
+  ansible.builtin.template:
+    src: templates/myid.j2
+    dest: /opt/zk/zk-3.6.3/data/myid
+    owner: zk
+    group: zk
+    mode: '0644'
+  when: zkRole.stat.exists == false
 
 # reload systemd
 - name: Reload Systemd
@@ -97,6 +116,22 @@
 
 # start zk
 - name: Start Zookeeper
-  ansible.builtin.service: 
+  ansible.builtin.service:
     name: zookeeper
     state: started
+
+- name: Create Roles directory
+  become: true
+  ansible.builtin.file:
+    path: /opt/roles
+    state: directory
+    owner: root
+    mode: '0644'
+
+- name: Drop zk role file
+  become: true
+  ansible.builtin.file:
+    path: /opt/roles/zk
+    state: touch
+    owner: root
+    mode: '0644'

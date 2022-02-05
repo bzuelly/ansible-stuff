@@ -1,0 +1,99 @@
+---
+# tasks file for roles/websvr
+
+- name: Ping all hosts
+  ping:
+
+- name: disable selinux
+  selinux:
+    state: disabled
+    
+- name: XWeb packages are installed
+  yum:
+    name: 
+      - wget
+      - nano 
+      - git
+      - nginx
+      - nfs-utils
+    state: present
+    update_cache: true
+   
+- name: Create mnt nasbox directory
+  ansible.builtin.file:
+    path: /mnt/nasbox
+    state: directory
+    mode: '0755'
+
+- name: stop/disable firewalld
+  ansible.builtin.service: 
+    name: firewalld
+    state: stopped
+    masked: yes
+
+- name: disable firewalld
+  ansible.builtin.service: 
+    name: firewalld
+    enabled: no
+
+- name: Create nginx sites directory
+  ansible.builtin.file:
+    path: /etc/nginx/sites
+    state: directory
+    mode: '0755'
+
+- name: Copy repo conf to remote
+  ansible.builtin.copy:
+    src: files/repo.conf
+    dest: /etc/nginx/sites/repo.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Nginx
+    
+- name: copy nginx fancy module
+  ansible.builtin.copy:
+    src: files/ngx_http_fancyindex_module.so
+    dest: /usr/share/nginx/modules/ngx_http_fancyindex_module.so
+    owner: root
+    mode: '0644'
+
+- name: Copy nginx.conf to remote
+  ansible.builtin.copy:
+    src: files/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Nginx
+
+- name: start/enable nginx
+  ansible.builtin.service: 
+    name: nginx
+    state: started
+    masked: no
+
+- name: enable nginx
+  ansible.builtin.service: 
+    name: nginx
+    enabled: yes
+
+- name: Create /opt/scripts directory
+  ansible.builtin.file:
+    path: /opt/scripts
+    state: directory
+    mode: '0750'
+
+- name: Copy rocky_sync to remote
+  ansible.builtin.copy:
+    src: files/rocky_sync.sh
+    dest: /opt/scripts/rocky_sync.sh
+    owner: root
+    mode: '0640'
+
+- name: Copy excludes.txt to remote
+  ansible.builtin.copy:
+    src: files/excludes.txt
+    dest: /opt/scripts/excludes.txt
+    owner: root
+    mode: '0640'

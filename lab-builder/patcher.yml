@@ -1,0 +1,8 @@
+- hosts: xymonClients
+  user: bryan
+  become: true
+  tasks:
+    - name: update the system
+      dnf:
+        name: "*"
+        state: latest
