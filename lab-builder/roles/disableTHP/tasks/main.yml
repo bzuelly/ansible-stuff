@@ -6,4 +6,27 @@
   register: thp_status
 
 - debug:
-    var: thp_status.stdout  
+    var: thp_status  
+
+- name: Make nothp_profile directory
+  ansible.builtin.file:
+    path: /etc/tuned/nothp_profile
+    state: directory
+    owner: root
+    mode: '0750'
+
+- name: Copy tuned.conf
+  template:
+    src: templates/tuned.conf.j2
+    dest: /etc/tuned/nothp_profile/tuned.conf
+    owner: root
+    mode: '0750'
+
+- name: Enable THP profile
+  shell: "tuned-adm profile nothp_profile"
+
+- name: THP Status check
+  shell: "cat /sys/kernel/mm/transparent_hugepage/enabled"
+  register: thp_post_check
+- debug:
+    var: thp_post_check.stdout

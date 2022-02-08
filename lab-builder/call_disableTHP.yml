@@ -1,5 +1,6 @@
 ---
 - hosts: xweb
   user: bryan
+  become: true
   roles: 
      - disableTHP
