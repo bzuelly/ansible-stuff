@@ -1,0 +1,23 @@
+---
+# tasks file for roles/staticIP
+
+- name: ens192 interface
+  ansible.builtin.template:
+    src: templates/ifcfg-ens192.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-ens192
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Restart Network Manager
+
+- name: resolv conf
+  ansible.builtin.template:
+    src: templates/resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Restart Network Manager
+
+
+

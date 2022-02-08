@@ -23,4 +23,8 @@
 10.254.239.106
 
 [xweb]
-10.254.239.138
+10.254.239.138 host_name=xweb.xlab.lcl
+
+[xlabdns]
+10.254.239.157 host_name=dns1.xlab.lcl
+10.254.239.139 host_name=dns2.xlab.lcl

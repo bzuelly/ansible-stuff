@@ -1,0 +1,6 @@
+---
+- hosts: xlabdns
+  user: bryan
+  become: true
+  roles: 
+     - bind9

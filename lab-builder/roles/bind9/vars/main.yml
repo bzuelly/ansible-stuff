@@ -1,0 +1,11 @@
+---
+# vars file for roles/bind9
+
+domain: xlab.lcl
+
+rev_domain: 254.239.10.in-addr.arpa
+
+records:
+  dns1: {forward: 10.254.239.157, last: 1, type: A, in: IN, rev: 239.254.10.in-addr.arpa.}
+  dns2: {forward: 10.254.239.139, last: 5, type: A, in: IN, rev: 239.254.10.in-addr.arpa.}
+  xweb: {forward: 10.254.239.138, last: 11, type: A, in: IN, rev: 239.254.10.in-addr.arpa.}

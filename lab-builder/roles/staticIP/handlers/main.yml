@@ -1,0 +1,7 @@
+---
+# handlers file for roles/staticIP
+
+- name: Restart Network Manager
+  service: 
+    name=NetworkManager
+    state=restarted

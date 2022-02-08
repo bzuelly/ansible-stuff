@@ -1,0 +1,12 @@
+# configured via ansible
+BOOTPROTO="static"
+DEVICE="ens192"
+ONBOOT=yes
+TYPE=Ethernet
+IPADDR="{{ ansible_ens192.ipv4.address }}"
+NETMASK="{{ ansible_default_ipv4.netmask }}" 
+GATEWAY="{{ ansible_default_ipv4.gateway }}" 
+DHCP_HOSTNAME="{{ host_name  }}"
+IPV4_FAILURE_FATAL=no
+IPV6INIT=no
+NAME="System ens192"

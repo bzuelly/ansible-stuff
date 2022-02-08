@@ -1,0 +1,9 @@
+---
+# tasks file for roles/disableTHP
+
+- name: Register THP status
+  shell: "tuned-adm active | sed -n -e 's/^.*profile: //p'"
+  register: thp_status
+
+- debug:
+    var: thp_status.stdout  
